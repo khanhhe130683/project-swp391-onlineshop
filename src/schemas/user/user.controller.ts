@@ -1,6 +1,7 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { Role } from 'src/shared/constants/common.constant';
 import { Roles } from 'src/shared/decorator/roles.decorator';
+import { QueryParamDto } from 'src/shared/dto/query-params.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { CreateUserDto } from './create-user.dto';
@@ -8,22 +9,23 @@ import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Post('register')
   async register(@Body() body: CreateUserDto) {
     const createdUser = await this.userService.create(body);
-    if (!createdUser) {
-      throw new HttpException('Register fail', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     return createdUser;
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Get()
-  async getAll() {
-    return this.userService.getAll();
+  async getAll(@Query() query: QueryParamDto) {
+    const condition = { isActive: true };
+    if (query.search) {
+      condition['name'] = query.search;
+    }
+    return this.userService.getAll(condition, query);
   }
 
   @UseGuards(JwtAuthGuard)
