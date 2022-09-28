@@ -11,7 +11,7 @@ export class UserService {
   constructor(
     @InjectModel(User.name)
     private userModel: Model<UserDocument>,
-  ) { }
+  ) {}
 
   async create(createdUserDto: CreateUserDto): Promise<UserDocument> {
     const createdUser = await this.userModel.create(createdUserDto);
@@ -27,7 +27,7 @@ export class UserService {
     if (query.sortBy) {
       sort[query.sortBy] = query.sortOrder == 'desc' ? -1 : 1;
     } else {
-      sort['createdAt'] = 1;
+      sort['createdAt'] = -1;
     }
     return this.userModel.aggregate([
       {

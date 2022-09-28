@@ -1,5 +1,8 @@
-import { BadRequestException, Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
+import * as mongoose from 'mongoose';
 import { ORDERCODE } from 'src/shared/constants/common.constant';
+import { GetUser } from 'src/shared/decorator/get-user.decorator';
+import { QueryParamDto } from 'src/shared/dto/query-params.dto';
 import generateOrderCode from 'src/shared/helper/orderCode';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { OrderDetailService } from '../order-detail/order-detail.service';
@@ -7,6 +10,7 @@ import { ProductService } from '../product/product.service';
 import { CreateOrderDto } from './create-order.dto';
 import { OrderService } from './order.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('orders')
 export class OrderController {
   constructor(
@@ -15,7 +19,6 @@ export class OrderController {
     private readonly orderDetailService: OrderDetailService,
   ) { }
 
-  @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() body: CreateOrderDto, @Req() req) {
     // Sort array by productId
@@ -70,12 +73,16 @@ export class OrderController {
     return orderCreated;
   }
 
-  // @Get()
-  // async getAll() {
-  //   const condition = { isActive: true };
-  //   if (query.search) {
-  //     condition['name'] = query.search;
-  //   }
-  //   return this.orderService.getAll();
-  // }
+  @Get()
+  async getAll(@Query() query: QueryParamDto, @GetUser() user) {
+    const condition = {
+      isDeleted: false,
+      user: new mongoose.Types.ObjectId(user._id),
+    };
+    const search = {};
+    if (query.search) {
+      search['key'] = query.search;
+    }
+    return this.orderService.getAll(condition, search, query);
+  }
 }
