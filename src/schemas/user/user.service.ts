@@ -11,7 +11,7 @@ export class UserService {
   constructor(
     @InjectModel(User.name)
     private userModel: Model<UserDocument>,
-  ) {}
+  ) { }
 
   async create(createdUserDto: CreateUserDto): Promise<UserDocument> {
     const createdUser = await this.userModel.create(createdUserDto);
@@ -21,13 +21,25 @@ export class UserService {
     return createdUser;
   }
 
-  async getAll(condition: any, query: QueryParamDto): Promise<UserDocument[]> {
+  async getAll(condition: any, search, query: QueryParamDto): Promise<UserDocument[]> {
     const { limit, skip } = pagination(query.page, query.pageSize);
     const sort = {};
     if (query.sortBy) {
       sort[query.sortBy] = query.sortOrder == 'desc' ? -1 : 1;
+    } else {
+      sort['createdAt'] = 1;
     }
-    return this.userModel.aggregate([{ $match: condition }, { $limit: limit }, { $skip: skip }, { $sort: sort }]);
+    return this.userModel.aggregate([
+      {
+        $match: {
+          ...condition,
+          $or: [{ name: new RegExp(search.key) }, { email: new RegExp(search.key) }],
+        },
+      },
+      { $limit: limit },
+      { $skip: skip },
+      { $sort: sort },
+    ]);
   }
 
   async getById(id: string): Promise<UserDocument> {

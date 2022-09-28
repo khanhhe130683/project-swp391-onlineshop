@@ -18,6 +18,9 @@ export class Product extends BaseSchema {
   description: string;
 
   @Prop()
+  images: string[];
+
+  @Prop()
   productCode: string;
 
   @Prop()

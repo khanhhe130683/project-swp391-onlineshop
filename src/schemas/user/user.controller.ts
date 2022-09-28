@@ -9,7 +9,7 @@ import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Post('register')
   async register(@Body() body: CreateUserDto) {
@@ -22,10 +22,11 @@ export class UserController {
   @Get()
   async getAll(@Query() query: QueryParamDto) {
     const condition = { isActive: true };
+    const search = {};
     if (query.search) {
-      condition['name'] = query.search;
+      search['key'] = query.search;
     }
-    return this.userService.getAll(condition, query);
+    return this.userService.getAll(condition, search, query);
   }
 
   @UseGuards(JwtAuthGuard)

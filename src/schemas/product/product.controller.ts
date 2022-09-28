@@ -1,16 +1,40 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './create-product.dto';
 import { QueryParamDto } from 'src/shared/dto/query-params.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { multerOptions } from 'src/shared/helper/multer.option';
 
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  async create(@Body() body: CreateProductDto) {
-    const createdCategory = await this.productService.create(body);
+  @UseInterceptors(FilesInterceptor('files', 3, multerOptions))
+  async create(@UploadedFiles() files: Array<Express.Multer.File>, @Body() body: CreateProductDto) {
+    const images = files.map((file) => {
+      return file.filename;
+    });
+
+    const dataCreate = {
+      ...body,
+      images,
+    };
+    const createdCategory = await this.productService.create(dataCreate);
     if (!createdCategory) {
       throw new HttpException('Create fail', HttpStatus.INTERNAL_SERVER_ERROR);
     }

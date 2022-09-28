@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { jwtConfig } from 'src/config/config.constants';
 import { UserDocument } from '../user/user.schema';
 import { UserService } from '../user/user.service';
 
@@ -21,5 +22,15 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async getCookieWithJwtToken(id: number) {
+    const payload = { id };
+    const token = this.jwtService.sign(payload);
+    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${jwtConfig.expiresIn}`;
+  }
+
+  public getCookieForLogOut() {
+    return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
   }
 }
