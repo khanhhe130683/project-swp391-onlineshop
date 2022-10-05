@@ -1,4 +1,5 @@
-import { BadRequestException, Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import * as mongoose from 'mongoose';
 import { ORDERCODE } from 'src/shared/constants/common.constant';
 import { GetUser } from 'src/shared/decorator/get-user.decorator';
@@ -8,8 +9,11 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { OrderDetailService } from '../order-detail/order-detail.service';
 import { ProductService } from '../product/product.service';
 import { CreateOrderDto } from './create-order.dto';
+import { ORDER_SWAGGER_RESPONSE } from './order.constant';
 import { OrderService } from './order.service';
 
+@ApiTags('Order')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('orders')
 export class OrderController {
@@ -17,8 +21,10 @@ export class OrderController {
     private readonly orderService: OrderService,
     private readonly productService: ProductService,
     private readonly orderDetailService: OrderDetailService,
-  ) { }
+  ) {}
 
+  @ApiOkResponse(ORDER_SWAGGER_RESPONSE.CREATE_SUCCESS)
+  @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Post()
   async create(@Body() body: CreateOrderDto, @Req() req) {
     // Sort array by productId
@@ -73,6 +79,8 @@ export class OrderController {
     return orderCreated;
   }
 
+  @ApiOkResponse(ORDER_SWAGGER_RESPONSE.GET_LIST_SUCCESS)
+  @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Get()
   async getAll(@Query() query: QueryParamDto, @GetUser() user) {
     const condition = {
@@ -84,5 +92,23 @@ export class OrderController {
       search['key'] = query.search;
     }
     return this.orderService.getAll(condition, search, query);
+  }
+
+  @ApiOkResponse(ORDER_SWAGGER_RESPONSE.GET_ORDER_SUCCESS)
+  @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
+  @Get(':id')
+  async getOne(@GetUser() user, @Param('id') id) {
+    const condition = {
+      _id: id,
+      user: user._id,
+    };
+    return this.orderService.getOne(condition);
+  }
+
+  @ApiOkResponse(ORDER_SWAGGER_RESPONSE.DELETE_SUCCESS)
+  @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
+  @Patch('delete/:id')
+  async delete(@Param('id') id) {
+    return this.orderService.delete(id);
   }
 }

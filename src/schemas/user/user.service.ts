@@ -1,17 +1,36 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 import { QueryParamDto } from 'src/shared/dto/query-params.dto';
 import pagination from 'src/shared/helper/pagination';
+import { ChangePasswordDto } from './change-password.dto';
 import { CreateUserDto } from './create-user.dto';
 import { User, UserDocument } from './user.schema';
+import { DEFAULT_ADMIN_USER } from './user.constant';
 
 @Injectable()
-export class UserService {
+export class UserService implements OnModuleInit {
   constructor(
     @InjectModel(User.name)
     private userModel: Model<UserDocument>,
   ) {}
+
+  async onModuleInit() {
+    const userListFound = await this.userModel.find();
+    if (!userListFound.length) {
+      await this.userModel.create({
+        email: DEFAULT_ADMIN_USER.email,
+        password: await bcrypt.hash(DEFAULT_ADMIN_USER.password, 10),
+        name: DEFAULT_ADMIN_USER.name,
+      });
+    }
+  }
+
+  async changePassword(id: string, data: ChangePasswordDto) {
+    const hashPassword = await bcrypt.hash(data.newPassword, 10);
+    return this.userModel.updateOne({ _id: id }, { password: hashPassword });
+  }
 
   async create(createdUserDto: CreateUserDto): Promise<UserDocument> {
     const createdUser = await this.userModel.create(createdUserDto);

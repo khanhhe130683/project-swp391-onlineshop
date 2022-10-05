@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConfig } from 'src/config/config.constants';
 import { UserDocument } from '../user/user.schema';
@@ -10,6 +10,9 @@ export class AuthService {
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.userService.findOne(email);
+    if (!user) {
+      throw new BadRequestException('User not found, disabled or locked');
+    }
     if (user && user.password === password) {
       user.password = null;
       return user;

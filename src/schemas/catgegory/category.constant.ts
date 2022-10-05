@@ -1,22 +1,14 @@
 import { swaggerSchemaExample } from 'src/shared/utils/swagger_schema';
 
-export enum OrderStatus {
-  CREATE = 'create',
-  CONFIRM = 'confirm',
-  SHIPPING = 'shipping',
-  COMPLETE = 'complete',
-  CANCEL = 'cancel',
-}
-
-export const ORDER_SWAGGER_RESPONSE = {
+export const CATEGORY_SWAGGER_RESPONSE = {
   CREATE_SUCCESS: swaggerSchemaExample(
     {
       data: {
         id: '163282b13bec5fb726c7a8632',
         created_at: '2022-08-23T02:21:16.992Z',
         updated_at: '2022-08-23T02:21:16.992Z',
-        user: '631b05a76591da678480d09f',
-        orderCode: '54567125',
+        name: 'Day Chuyen',
+        slug: 'day-chuyen',
         isDeleted: false,
       },
     },
@@ -30,14 +22,14 @@ export const ORDER_SWAGGER_RESPONSE = {
     },
     'Update success',
   ),
-  GET_ORDER_SUCCESS: swaggerSchemaExample(
+  GET_CATEGORY_SUCCESS: swaggerSchemaExample(
     {
       data: {
         id: '163282b13bec5fb726c7a8632',
         created_at: '2022-08-23T02:21:16.992Z',
         updated_at: '2022-08-23T02:21:16.992Z',
-        user: '631b05a76591da678480d09f',
-        orderCode: '54567125',
+        name: 'Day Chuyen',
+        slug: 'day-chuyen',
         isDeleted: false,
       },
     },
@@ -58,8 +50,8 @@ export const ORDER_SWAGGER_RESPONSE = {
           id: '163282b13bec5fb726c7a8632',
           created_at: '2022-08-23T02:21:16.992Z',
           updated_at: '2022-08-23T02:21:16.992Z',
-          user: '631b05a76591da678480d09f',
-          orderCode: '54567125',
+          name: 'Day Chuyen',
+          slug: 'day-chuyen',
           isDeleted: false,
         },
       ],

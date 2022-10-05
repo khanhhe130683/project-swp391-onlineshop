@@ -1,22 +1,21 @@
 import { swaggerSchemaExample } from 'src/shared/utils/swagger_schema';
 
-export enum OrderStatus {
-  CREATE = 'create',
-  CONFIRM = 'confirm',
-  SHIPPING = 'shipping',
-  COMPLETE = 'complete',
-  CANCEL = 'cancel',
-}
-
-export const ORDER_SWAGGER_RESPONSE = {
+export const PRODUCT_SWAGGER_RESPONSE = {
   CREATE_SUCCESS: swaggerSchemaExample(
     {
       data: {
         id: '163282b13bec5fb726c7a8632',
         created_at: '2022-08-23T02:21:16.992Z',
         updated_at: '2022-08-23T02:21:16.992Z',
-        user: '631b05a76591da678480d09f',
-        orderCode: '54567125',
+        category: '631b05a76591da678480d09f',
+        name: 'Vòng cổ',
+        description: 'Vòng cổ',
+        image: ['553123ac22e610a4a710610a329bc105a3cf.png'],
+        productCode: 'VCO',
+        importPrice: 100,
+        salePrice: 120,
+        allowQuantity: 10,
+        actualQuantity: 10,
         isDeleted: false,
       },
     },
@@ -30,14 +29,21 @@ export const ORDER_SWAGGER_RESPONSE = {
     },
     'Update success',
   ),
-  GET_ORDER_SUCCESS: swaggerSchemaExample(
+  GET_PRODUCT_SUCCESS: swaggerSchemaExample(
     {
       data: {
         id: '163282b13bec5fb726c7a8632',
         created_at: '2022-08-23T02:21:16.992Z',
         updated_at: '2022-08-23T02:21:16.992Z',
-        user: '631b05a76591da678480d09f',
-        orderCode: '54567125',
+        category: '631b05a76591da678480d09f',
+        name: 'Vòng cổ',
+        description: 'Vòng cổ',
+        image: ['553123ac22e610a4a710610a329bc105a3cf.png'],
+        productCode: 'VCO',
+        importPrice: 100,
+        salePrice: 120,
+        allowQuantity: 10,
+        actualQuantity: 10,
         isDeleted: false,
       },
     },
@@ -58,8 +64,15 @@ export const ORDER_SWAGGER_RESPONSE = {
           id: '163282b13bec5fb726c7a8632',
           created_at: '2022-08-23T02:21:16.992Z',
           updated_at: '2022-08-23T02:21:16.992Z',
-          user: '631b05a76591da678480d09f',
-          orderCode: '54567125',
+          category: '631b05a76591da678480d09f',
+          name: 'Vòng cổ',
+          description: 'Vòng cổ',
+          image: ['553123ac22e610a4a710610a329bc105a3cf.png'],
+          productCode: 'VCO',
+          importPrice: 100,
+          salePrice: 120,
+          allowQuantity: 10,
+          actualQuantity: 10,
           isDeleted: false,
         },
       ],

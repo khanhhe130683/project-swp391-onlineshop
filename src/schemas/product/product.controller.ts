@@ -18,11 +18,17 @@ import { CreateProductDto } from './create-product.dto';
 import { QueryParamDto } from 'src/shared/dto/query-params.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/shared/helper/multer.option';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { PRODUCT_SWAGGER_RESPONSE } from './product.constant';
 
 @Controller('products')
+@ApiTags('Product')
+@ApiBearerAuth()
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @ApiOkResponse(PRODUCT_SWAGGER_RESPONSE.CREATE_SUCCESS)
+  @ApiBadRequestResponse(PRODUCT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Post()
   @UseInterceptors(FilesInterceptor('files', 3, multerOptions))
   async create(@UploadedFiles() files: Array<Express.Multer.File>, @Body() body: CreateProductDto) {
@@ -41,6 +47,8 @@ export class ProductController {
     return createdCategory;
   }
 
+  @ApiOkResponse(PRODUCT_SWAGGER_RESPONSE.GET_LIST_SUCCESS)
+  @ApiBadRequestResponse(PRODUCT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Get()
   async getAll(@Query() query: QueryParamDto) {
     const condition = { isActive: true };
@@ -50,11 +58,15 @@ export class ProductController {
     return this.productService.getAll(condition, query);
   }
 
+  @ApiOkResponse(PRODUCT_SWAGGER_RESPONSE.GET_PRODUCT_SUCCESS)
+  @ApiBadRequestResponse(PRODUCT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Get('id')
   async getById(@Param('id') id) {
     return this.productService.getById(id);
   }
 
+  @ApiOkResponse(PRODUCT_SWAGGER_RESPONSE.UPDATE_SUCCESS)
+  @ApiBadRequestResponse(PRODUCT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(@Param('id') id, @Body() body) {

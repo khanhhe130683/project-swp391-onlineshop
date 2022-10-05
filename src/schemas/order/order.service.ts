@@ -10,7 +10,7 @@ export class OrderService {
   constructor(
     @InjectModel(Order.name)
     private orderModel: Model<OrderDocument>,
-  ) { }
+  ) {}
 
   async create(data: object): Promise<OrderDocument> {
     const orderCreated = await this.orderModel.create(data);
@@ -40,5 +40,9 @@ export class OrderService {
       { $skip: skip },
       { $sort: sort },
     ]);
+  }
+
+  async getOne(condition: any) {
+    return this.orderModel.findOne(condition);
   }
 }

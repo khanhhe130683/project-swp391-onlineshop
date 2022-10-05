@@ -9,6 +9,9 @@ export class Category extends BaseSchema {
   @Prop()
   name: string;
 
+  @Prop()
+  slug: string;
+
   @Prop({ default: false })
   isDeleted: boolean;
 

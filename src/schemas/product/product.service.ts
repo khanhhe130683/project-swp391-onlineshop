@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { QueryParamDto } from 'src/shared/dto/query-params.dto';
 import pagination from 'src/shared/helper/pagination';
-import { CreateProductImageDto } from './create-Product.dto';
+import { CreateProductDto } from './create-product.dto';
 import { Product, ProductDocument } from './Product.schema';
 
 @Injectable()
@@ -11,9 +11,9 @@ export class ProductService {
   constructor(
     @InjectModel(Product.name)
     private productModel: Model<ProductDocument>,
-  ) { }
+  ) {}
 
-  async create(createdProductDto: CreateProductImageDto): Promise<ProductDocument> {
+  async create(createdProductDto: CreateProductDto): Promise<ProductDocument> {
     const createProductData = {
       ...createdProductDto,
       allowedQuantity: createdProductDto.actualQuantity,
