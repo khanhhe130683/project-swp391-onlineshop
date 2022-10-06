@@ -1,4 +1,4 @@
-import { ForbiddenException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Category, CategoryDocument } from './category.schema';
 import { Product } from '../product/product.schema';
@@ -12,7 +12,7 @@ export class CategoryService {
     private categoryModel: Model<CategoryDocument>,
     @InjectModel(Product.name)
     private productModel: Model<CategoryDocument>,
-  ) { }
+  ) {}
 
   async create(createdCategoryDto: CreateCategoryDto): Promise<CategoryDocument> {
     const createdCategory = await this.categoryModel.create(createdCategoryDto);
