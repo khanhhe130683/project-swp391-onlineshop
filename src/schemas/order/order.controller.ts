@@ -1,5 +1,5 @@
-import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import * as mongoose from 'mongoose';
 import { ORDERCODE } from 'src/shared/constants/common.constant';
 import { GetUser } from 'src/shared/decorator/get-user.decorator';
@@ -23,6 +23,10 @@ export class OrderController {
     private readonly orderDetailService: OrderDetailService,
   ) {}
 
+  @ApiBody({
+    description: 'Order',
+    type: CreateOrderDto,
+  })
   @ApiOkResponse(ORDER_SWAGGER_RESPONSE.CREATE_SUCCESS)
   @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Post()
@@ -94,6 +98,11 @@ export class OrderController {
     return this.orderService.getAll(condition, search, query);
   }
 
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'id of order',
+  })
   @ApiOkResponse(ORDER_SWAGGER_RESPONSE.GET_ORDER_SUCCESS)
   @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Get(':id')
@@ -105,9 +114,14 @@ export class OrderController {
     return this.orderService.getOne(condition);
   }
 
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'id of order',
+  })
   @ApiOkResponse(ORDER_SWAGGER_RESPONSE.DELETE_SUCCESS)
   @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
-  @Patch('delete/:id')
+  @Delete('delete/:id')
   async delete(@Param('id') id) {
     return this.orderService.delete(id);
   }

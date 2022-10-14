@@ -42,4 +42,8 @@ export class ProductService {
   async update(id: string, dataUpdate: object) {
     return this.productModel.updateOne({ _id: id }, dataUpdate);
   }
+
+  async delete(id: string) {
+    return this.productModel.updateOne({ _id: id }, { isDeleted: true });
+  }
 }

@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConfig } from 'src/config/config.constants';
 import { UserDocument } from '../user/user.schema';
 import { UserService } from '../user/user.service';
 
@@ -13,10 +13,11 @@ export class AuthService {
     if (!user) {
       throw new BadRequestException('User not found, disabled or locked');
     }
-    if (user && user.password === password) {
-      user.password = null;
+    const comparePassword = await bcrypt.compare(password, user.password);
+    if (user && comparePassword) {
       return user;
     }
+
     return null;
   }
 

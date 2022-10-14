@@ -4,8 +4,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './schemas/auth/auth.module';
 import { CategoryModule } from './schemas/catgegory/category.module';
+import { CommentModule } from './schemas/comment/comment.module';
 import { OrderModule } from './schemas/order/order.module';
 import { ProductModule } from './schemas/product/product.module';
+import { ReplyCommentModule } from './schemas/reply-comment/reply-comment.module';
 import { UserModule } from './schemas/user/user.module';
 
 @Module({
@@ -16,6 +18,8 @@ import { UserModule } from './schemas/user/user.module';
     ProductModule,
     CategoryModule,
     OrderModule,
+    CommentModule,
+    ReplyCommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

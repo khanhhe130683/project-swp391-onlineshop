@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
@@ -18,7 +19,7 @@ import { CreateProductDto } from './create-product.dto';
 import { QueryParamDto } from 'src/shared/dto/query-params.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/shared/helper/multer.option';
-import { ApiBadRequestResponse, ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { PRODUCT_SWAGGER_RESPONSE } from './product.constant';
 
 @Controller('products')
@@ -27,10 +28,14 @@ import { PRODUCT_SWAGGER_RESPONSE } from './product.constant';
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @ApiBody({
+    description: 'Product',
+    type: CreateProductDto,
+  })
   @ApiOkResponse(PRODUCT_SWAGGER_RESPONSE.CREATE_SUCCESS)
   @ApiBadRequestResponse(PRODUCT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Post()
-  @UseInterceptors(FilesInterceptor('files', 3, multerOptions))
+  @UseInterceptors(FilesInterceptor('images', 3, multerOptions))
   async create(@UploadedFiles() files: Array<Express.Multer.File>, @Body() body: CreateProductDto) {
     const images = files.map((file) => {
       return file.filename;
@@ -51,13 +56,18 @@ export class ProductController {
   @ApiBadRequestResponse(PRODUCT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Get()
   async getAll(@Query() query: QueryParamDto) {
-    const condition = { isActive: true };
+    const condition = { isDeleted: false };
     if (query.search) {
       condition['name'] = query.search;
     }
     return this.productService.getAll(condition, query);
   }
 
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'id of product',
+  })
   @ApiOkResponse(PRODUCT_SWAGGER_RESPONSE.GET_PRODUCT_SUCCESS)
   @ApiBadRequestResponse(PRODUCT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Get('id')
@@ -65,6 +75,11 @@ export class ProductController {
     return this.productService.getById(id);
   }
 
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'id of product',
+  })
   @ApiOkResponse(PRODUCT_SWAGGER_RESPONSE.UPDATE_SUCCESS)
   @ApiBadRequestResponse(PRODUCT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @UseGuards(JwtAuthGuard)
@@ -75,5 +90,17 @@ export class ProductController {
       updatedBy: id,
     };
     return this.productService.update(id, dataUpdate);
+  }
+
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'id of product',
+  })
+  @ApiOkResponse(PRODUCT_SWAGGER_RESPONSE.DELETE_SUCCESS)
+  @ApiBadRequestResponse(PRODUCT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
+  @Delete('delete/:id')
+  async delete(@Param('id') id) {
+    return this.productService.delete(id);
   }
 }

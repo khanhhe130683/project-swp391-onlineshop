@@ -15,7 +15,7 @@ export class AuthController {
     const { email, password } = body;
     const user = await this.authService.validateUser(email, password);
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Wrong pasword! Please enter again.');
     }
     return this.authService.login(user);
   }
