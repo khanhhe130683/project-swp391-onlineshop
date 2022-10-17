@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
 import { Role } from 'src/shared/constants/common.constant';
@@ -18,6 +18,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOkResponse(USER_SWAGGER_RESPONSE.UPDATE_SUCCESS)
   @ApiBadRequestResponse(USER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @ApiBadRequestResponse(USER_SWAGGER_RESPONSE.BAD_REQUEST_WRONG_PASSWORD)
@@ -32,7 +33,7 @@ export class UserController {
     if (body.newPassword !== body.confirmPassword) {
       throw new BadRequestException('New password and Confirm password dont match');
     }
-    return this.userService.changePassword(user.id, body);
+    return this.userService.changePassword(user._id, body);
   }
 
   @ApiBody({
@@ -65,7 +66,7 @@ export class UserController {
 
   @ApiParam({
     name: 'id',
-    type: 'number',
+    type: 'string',
     description: 'id of user',
   })
   @ApiOkResponse(USER_SWAGGER_RESPONSE.GET_USER_SUCCESS)
@@ -78,8 +79,12 @@ export class UserController {
 
   @ApiParam({
     name: 'id',
-    type: 'number',
+    type: 'string',
     description: 'id of user',
+  })
+  @ApiBody({
+    description: 'User',
+    type: CreateUserDto,
   })
   @ApiOkResponse(USER_SWAGGER_RESPONSE.UPDATE_SUCCESS)
   @ApiBadRequestResponse(USER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
@@ -92,5 +97,17 @@ export class UserController {
       updatedBy,
     };
     return this.userService.update(id, dataUpdate);
+  }
+
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'id of user',
+  })
+  @ApiOkResponse(USER_SWAGGER_RESPONSE.DELETE_SUCCESS)
+  @ApiBadRequestResponse(USER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
+  @Delete(':id')
+  async inActive(@Param('id') id) {
+    return this.userService.delete(id);
   }
 }

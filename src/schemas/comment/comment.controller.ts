@@ -11,7 +11,7 @@ import { CreateCommentDto, UpdateCommentDto } from './create-comment.dto';
 @Controller('comments')
 @UseGuards(JwtAuthGuard)
 export class CommentController {
-  constructor(private readonly commentService: CommentService) {}
+  constructor(private readonly commentService: CommentService) { }
 
   @Post()
   @ApiBody({
@@ -28,6 +28,11 @@ export class CommentController {
     return this.commentService.create(data);
   }
 
+  @ApiParam({
+    name: 'productId',
+    type: 'string',
+    description: 'id of product',
+  })
   @Get(':productId')
   @ApiOkResponse(COMMENT_SWAGGER_RESPONSE.GET_LIST_SUCCESS)
   @ApiBadRequestResponse(COMMENT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)

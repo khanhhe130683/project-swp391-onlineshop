@@ -9,17 +9,21 @@ export class CommentService {
   constructor(
     @InjectModel(Comment.name)
     private commentModel: Model<CommentDocument>,
-  ) {}
+  ) { }
 
   async create(data: any) {
     const createdCategory = await this.commentModel.create(data);
     return createdCategory;
   }
 
-  async getAll(productId: string): Promise<CommentDocument[]> {
+  async getAll(productId: any): Promise<CommentDocument[]> {
+    const condition = {
+      isDeleted: false,
+      product: new mongoose.Types.ObjectId(productId),
+    };
     return this.commentModel.aggregate([
       {
-        $match: { isDeleted: false, product: new mongoose.Types.ObjectId(productId) },
+        $match: condition,
       },
       {
         $lookup: {
@@ -27,13 +31,18 @@ export class CommentService {
           localField: '_id',
           foreignField: 'comment',
           as: 'reply_comment',
+          pipeline: [
+            {
+              $match: { isDeleted: false },
+            },
+          ],
         },
       },
     ]);
   }
 
   async update(id: string, dataUpdate: any) {
-    return this.commentModel.updateOne({ _id: id }, dataUpdate);
+    return this.commentModel.updateOne({ _id: new mongoose.Types.ObjectId(id) }, dataUpdate);
   }
 
   async delete(id: string) {

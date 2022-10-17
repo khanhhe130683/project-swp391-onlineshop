@@ -6,7 +6,7 @@ import { CreateReplyCommentDto, UpdateReplyCommentDto } from './create-reply-com
 import { GetUser } from 'src/shared/decorator/get-user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@ApiTags('Comment')
+@ApiTags('ReplyComment')
 @ApiBearerAuth()
 @Controller('reply-comments')
 @UseGuards(JwtAuthGuard)

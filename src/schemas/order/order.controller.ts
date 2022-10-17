@@ -59,7 +59,7 @@ export class OrderController {
     const dataOrderDetail = [];
     for (const index in products) {
       if (products[index].allowedQuantity < listProducts[index].quantity) {
-        await this.orderService.delete(orderCreated._id);
+        await this.orderService.hardDelete(orderCreated._id);
         throw new BadRequestException('Please choose allowed quantity!');
       }
 
@@ -108,8 +108,8 @@ export class OrderController {
   @Get(':id')
   async getOne(@GetUser() user, @Param('id') id) {
     const condition = {
-      _id: id,
-      user: user._id,
+      _id: new mongoose.Types.ObjectId(id),
+      user: new mongoose.Types.ObjectId(user._id),
     };
     return this.orderService.getOne(condition);
   }
@@ -121,7 +121,7 @@ export class OrderController {
   })
   @ApiOkResponse(ORDER_SWAGGER_RESPONSE.DELETE_SUCCESS)
   @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
-  @Delete('delete/:id')
+  @Delete(':id')
   async delete(@Param('id') id) {
     return this.orderService.delete(id);
   }

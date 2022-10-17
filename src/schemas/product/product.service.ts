@@ -27,19 +27,21 @@ export class ProductService {
     const sort = {};
     if (query.sortBy) {
       sort[query.sortBy] = query.sortOrder == 'desc' ? -1 : 1;
+    } else {
+      sort['createdAt'] = -1;
     }
     return this.productModel.aggregate([{ $match: condition }, { $limit: limit }, { $skip: skip }, { $sort: sort }]);
   }
 
   async getById(id: string): Promise<ProductDocument> {
-    return this.productModel.findById(id).exec();
+    return this.productModel.findById(id);
   }
 
   async getByIds(ids: string[]): Promise<ProductDocument[]> {
     return this.productModel.find({ _id: { $in: ids } });
   }
 
-  async update(id: string, dataUpdate: object) {
+  async update(id: string, dataUpdate: any) {
     return this.productModel.updateOne({ _id: id }, dataUpdate);
   }
 

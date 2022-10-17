@@ -21,6 +21,10 @@ export class OrderService {
     return this.orderModel.updateOne({ _id: id }, { isDeleted: true });
   }
 
+  async hardDelete(id: string) {
+    return this.orderModel.deleteOne({ _id: id });
+  }
+
   async getAll(condition: any, search, query: QueryParamDto): Promise<OrderDocument[]> {
     const { limit, skip } = pagination(query.page, query.pageSize);
     const sort = {};
@@ -36,6 +40,14 @@ export class OrderService {
           orderCode: new RegExp(search.key),
         },
       },
+      {
+        $lookup: {
+          from: 'orderdetails',
+          localField: '_id',
+          foreignField: 'order',
+          as: 'order_details',
+        },
+      },
       { $limit: limit },
       { $skip: skip },
       { $sort: sort },
@@ -43,6 +55,20 @@ export class OrderService {
   }
 
   async getOne(condition: any) {
-    return this.orderModel.findOne(condition);
+    return this.orderModel.aggregate([
+      {
+        $match: {
+          ...condition,
+        },
+      },
+      {
+        $lookup: {
+          from: 'orderdetails',
+          localField: '_id',
+          foreignField: 'order',
+          as: 'order_details',
+        },
+      },
+    ]);
   }
 }

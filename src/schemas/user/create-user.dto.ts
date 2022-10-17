@@ -39,7 +39,7 @@ export class CreateUserDto {
     example: '0379416224',
   })
   @IsNotEmpty()
-  @IsPhoneNumber()
+  @IsPhoneNumber('VI')
   phoneNumber: string;
 
   @ApiProperty({

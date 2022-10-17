@@ -72,4 +72,8 @@ export class UserService implements OnModuleInit {
   async findOne(email: string): Promise<User> {
     return this.userModel.findOne({ email });
   }
+
+  async delete(id: string) {
+    return this.userModel.updateOne({ _id: id }, { isActive: false });
+  }
 }
