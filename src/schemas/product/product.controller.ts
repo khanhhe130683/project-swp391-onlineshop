@@ -102,7 +102,7 @@ export class ProductController {
   @UseInterceptors(FilesInterceptor('images', 3, multerOptions))
   @ApiOkResponse(PRODUCT_SWAGGER_RESPONSE.UPDATE_SUCCESS)
   @ApiBadRequestResponse(PRODUCT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
-  @UseGuards(JwtAuthGuard)
+  //@UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(@Body() body: UpdateProductDto, @Param('id') id, @GetUser() user) {
     const dataUpdate = {

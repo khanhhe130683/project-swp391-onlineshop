@@ -29,11 +29,17 @@ export class CategoryService {
   }
 
   async update(id: string, dataUpdate: any) {
-    const category = await this.categoryModel.findOne({ $or: [{ slug: dataUpdate.slug }, { name: dataUpdate.name }] });
+    const category = await this.categoryModel.findOne({
+      $or: [{ slug: dataUpdate.slug }, { name: dataUpdate.name }],
+    });
     if (category) {
       throw new BadRequestException(CATEGORY_REPONE.SLUG_EXISTED);
     }
     return this.categoryModel.updateOne({ _id: id }, dataUpdate);
+  }
+
+  async getById(id: string): Promise<ProductDocument> {
+    return this.categoryModel.findById(id);
   }
 
   async delete(id: string) {

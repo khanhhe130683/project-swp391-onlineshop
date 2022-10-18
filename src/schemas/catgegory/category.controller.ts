@@ -3,6 +3,7 @@ import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam,
 import { CATEGORY_SWAGGER_RESPONSE } from './category.constant';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './create-category.dto';
+import { PRODUCT_SWAGGER_RESPONSE } from '../product/product.constant';
 
 @ApiTags('Category')
 @ApiBearerAuth()
@@ -26,6 +27,18 @@ export class CategoryController {
   @ApiBadRequestResponse(CATEGORY_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   public getList() {
     return this.categoryService.getAll();
+  }
+
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'id of category',
+  })
+  @ApiOkResponse(PRODUCT_SWAGGER_RESPONSE.GET_PRODUCT_SUCCESS)
+  @ApiBadRequestResponse(PRODUCT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
+  @Get(':id')
+  async getById(@Param('id') id) {
+    return this.categoryService.getById(id);
   }
 
   @Patch(':id')
