@@ -6,7 +6,7 @@ import { ValidationPipe } from './shared/pipe/validation.pipe';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: ['http://localhost:9528', 'http://localhost:8080', 'http://localhost:8081', 'http://localhost:8000'],
+    origin: ['http://localhost:9528', 'http://localhost:9529', 'http://localhost:8081', 'http://localhost:8000'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
   });

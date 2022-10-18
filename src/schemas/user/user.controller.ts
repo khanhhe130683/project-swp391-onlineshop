@@ -67,7 +67,7 @@ export class UserController {
   @Roles(Role.ADMIN)
   @Get()
   async getAll(@Query() query: QueryParamDto) {
-    const condition = { isActive: true };
+    const condition = {};
     const search = {};
     if (query.search) {
       search['key'] = query.search;

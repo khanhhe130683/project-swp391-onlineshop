@@ -31,8 +31,8 @@ export class CreateUserDto {
     example: 20,
   })
   @IsOptional()
-  @IsNumber()
-  age: number;
+  @IsString()
+  age: string;
 
   @ApiProperty({
     description: 'phone number',
