@@ -5,6 +5,8 @@ import { Product, ProductDocument } from '../product/product.schema';
 import { Model } from 'mongoose';
 import { CreateCategoryDto } from './create-category.dto';
 import { CATEGORY_REPONE } from './category.constant';
+import { QueryParamDto } from 'src/shared/dto/query-params.dto';
+import pagination from 'src/shared/helper/pagination';
 
 @Injectable()
 export class CategoryService {
@@ -24,8 +26,15 @@ export class CategoryService {
     return createdCategory;
   }
 
-  async getAll(): Promise<CategoryDocument[]> {
-    return this.categoryModel.find({ isDeleted: false }).exec();
+  async getAll(condition: any, query: QueryParamDto): Promise<CategoryDocument[]> {
+    const { limit, skip } = pagination(query.page, query.pageSize);
+    const sort = {};
+    if (query.sortBy) {
+      sort[query.sortBy] = query.sortOrder == 'desc' ? -1 : 1;
+    } else {
+      sort['createdAt'] = -1;
+    }
+    return this.categoryModel.aggregate([{ $match: condition }, { $limit: limit }, { $skip: skip }, { $sort: sort }]);
   }
 
   async update(id: string, dataUpdate: any) {
