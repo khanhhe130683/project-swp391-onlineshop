@@ -101,7 +101,7 @@ export const CATEGORY_SWAGGER_RESPONSE = {
 };
 
 export const CATEGORY_REPONE = {
-  SLUG_EXISTED: 'Slug or Name is existed ',
+  SLUG_EXISTED: 'Slug or Name is existed',
   BAD_REQUEST: 'bad request',
   CATEGORY_HAVE_PRODUCTS: `Category Have Products Don't Delete`,
   PRODUCT_NOT_FOUND: 'Product not found',

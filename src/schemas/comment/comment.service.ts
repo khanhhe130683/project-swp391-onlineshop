@@ -9,7 +9,7 @@ export class CommentService {
   constructor(
     @InjectModel(Comment.name)
     private commentModel: Model<CommentDocument>,
-  ) { }
+  ) {}
 
   async create(data: any) {
     const createdCategory = await this.commentModel.create(data);

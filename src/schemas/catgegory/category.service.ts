@@ -13,7 +13,7 @@ export class CategoryService {
     private categoryModel: Model<CategoryDocument>,
     @InjectModel(Product.name)
     private productModel: Model<ProductDocument>,
-  ) { }
+  ) {}
 
   async create(body: CreateCategoryDto) {
     const category = await this.categoryModel.findOne({ $or: [{ slug: body.slug }, { name: body.name }] });

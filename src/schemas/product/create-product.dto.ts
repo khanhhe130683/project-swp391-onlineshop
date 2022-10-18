@@ -58,13 +58,9 @@ export class CreateProductDto {
   @IsNumberString()
   actualQuantity: number;
 
-  @ApiPropertyOptional({
-    description: 'images',
-    type: 'string',
-    format: 'binary',
-  })
+  @ApiPropertyOptional({ type: 'array', items: { type: 'string', format: 'binary' } })
   @IsOptional()
-  images: any;
+  images: any[];
 }
 
 export class UpdateProductDto {
@@ -124,11 +120,7 @@ export class UpdateProductDto {
   @IsNumberString()
   actualQuantity: number;
 
-  @ApiPropertyOptional({
-    description: 'images',
-    type: 'string',
-    format: 'binary',
-  })
+  @ApiPropertyOptional({ type: 'array', items: { type: 'string', format: 'binary' } })
   @IsOptional()
-  images: any;
+  images: any[];
 }

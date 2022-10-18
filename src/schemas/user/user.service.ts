@@ -32,15 +32,15 @@ export class UserService implements OnModuleInit {
     return this.userModel.updateOne({ _id: id }, { password: hashPassword });
   }
 
-  async create(createdUserDto: CreateUserDto): Promise<UserDocument> {
-    const createdUser = await this.userModel.create(createdUserDto);
+  async create(data: CreateUserDto): Promise<UserDocument> {
+    const createdUser = await this.userModel.create(data);
     if (!createdUser) {
       throw new HttpException('Register fail', HttpStatus.INTERNAL_SERVER_ERROR);
     }
     return createdUser;
   }
 
-  async getAll(condition: any, search, query: QueryParamDto): Promise<UserDocument[]> {
+  async getAll(condition: any, search: any, query: QueryParamDto): Promise<UserDocument[]> {
     const { limit, skip } = pagination(query.page, query.pageSize);
     const sort = {};
     if (query.sortBy) {
@@ -52,7 +52,7 @@ export class UserService implements OnModuleInit {
       {
         $match: {
           ...condition,
-          $or: [{ name: new RegExp(search.key) }, { email: new RegExp(search.key) }],
+          $or: [{ name: new RegExp(search.key, 'i') }, { email: new RegExp(search.key, 'i') }],
         },
       },
       { $limit: limit },

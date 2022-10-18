@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsNotEmpty, IsEnum } from 'class-validator';
+import { IsString, IsOptional, IsNotEmpty, IsEnum, IsMongoId } from 'class-validator';
 
 export class QueryParamDto {
   @IsString()
@@ -21,6 +21,12 @@ export class QueryParamDto {
   @IsString()
   @IsOptional()
   search: string;
+}
+
+export class QueryPostDto extends QueryParamDto {
+  @IsMongoId()
+  @IsOptional()
+  category: string;
 }
 
 export class ParamIdDto {

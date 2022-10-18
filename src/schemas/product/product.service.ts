@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { QueryParamDto } from 'src/shared/dto/query-params.dto';
+import { QueryPostDto } from 'src/shared/dto/query-params.dto';
 import pagination from 'src/shared/helper/pagination';
 import { CreateProductDto } from './create-product.dto';
 import { Product, ProductDocument } from './Product.schema';
@@ -22,7 +22,7 @@ export class ProductService {
     return createdProduct;
   }
 
-  async getAll(condition: any, query: QueryParamDto): Promise<ProductDocument[]> {
+  async getAll(condition: any, query: QueryPostDto): Promise<ProductDocument[]> {
     const { limit, skip } = pagination(query.page, query.pageSize);
     const sort = {};
     if (query.sortBy) {
@@ -30,7 +30,20 @@ export class ProductService {
     } else {
       sort['createdAt'] = -1;
     }
-    return this.productModel.aggregate([{ $match: condition }, { $limit: limit }, { $skip: skip }, { $sort: sort }]);
+    return this.productModel.aggregate([
+      { $match: condition },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'category',
+          foreignField: '_id',
+          as: 'category',
+        },
+      },
+      { $limit: limit },
+      { $skip: skip },
+      { $sort: sort },
+    ]);
   }
 
   async getById(id: string): Promise<ProductDocument> {
