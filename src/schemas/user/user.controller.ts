@@ -1,3 +1,4 @@
+import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
@@ -50,12 +51,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Get()
-  async getAll(@Query() query: QueryParamDto) {
-    const condition = { isActive: true };
-    const search = {};
-    if (query.search) {
-      search['key'] = query.search;
-    }
+@@ -29,12 +59,16 @@ export class UserController {
     return this.userService.getAll(condition, search, query);
   }
 
