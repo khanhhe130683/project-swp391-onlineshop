@@ -12,10 +12,10 @@ import {
 } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
-import { Role } from 'src/shared/constants/common.constant';
-import { GetUser } from 'src/shared/decorator/get-user.decorator';
-import { Roles } from 'src/shared/decorator/roles.decorator';
-import { QueryParamDto } from 'src/shared/dto/query-params.dto';
+import { Role } from '../../shared/constants/common.constant';
+import { GetUser } from '../../shared/decorator/get-user.decorator';
+import { Roles } from '../../shared/decorator/roles.decorator';
+import { QueryParamDto } from '../../shared/dto/query-params.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { ChangePasswordDto } from './change-password.dto';

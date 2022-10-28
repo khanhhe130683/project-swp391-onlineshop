@@ -1,4 +1,4 @@
-import { swaggerSchemaExample } from 'src/shared/utils/swagger_schema';
+import { swaggerSchemaExample } from '../../shared/utils/swagger_schema';
 
 export const AUTH_SWAGGER_RESPONSE = {
   LOGIN_SUCCESS: swaggerSchemaExample(

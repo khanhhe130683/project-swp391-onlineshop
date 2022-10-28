@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { QueryParamDto } from 'src/shared/dto/query-params.dto';
-import pagination from 'src/shared/helper/pagination';
+import { QueryParamDto } from '../../shared/dto/query-params.dto';
+import pagination from '../../shared/helper/pagination';
 import { Order, OrderDocument } from './order.schema';
 
 @Injectable()

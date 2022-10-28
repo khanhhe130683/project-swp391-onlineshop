@@ -3,7 +3,7 @@ import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam,
 import { REPLY_COMMENT_SWAGGER_RESPONSE } from './reply-comment.constant';
 import { ReplyCommentService } from './reply-comment.service';
 import { CreateReplyCommentDto, UpdateReplyCommentDto } from './create-reply-comment.dto';
-import { GetUser } from 'src/shared/decorator/get-user.decorator';
+import { GetUser } from '../../shared/decorator/get-user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('ReplyComment')

@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import { GetUser } from 'src/shared/decorator/get-user.decorator';
+import { GetUser } from '../../shared/decorator/get-user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { COMMENT_SWAGGER_RESPONSE } from './comment.constant';
 import { CommentService } from './comment.service';
@@ -11,7 +11,7 @@ import { CreateCommentDto, UpdateCommentDto } from './create-comment.dto';
 @Controller('comments')
 @UseGuards(JwtAuthGuard)
 export class CommentController {
-  constructor(private readonly commentService: CommentService) { }
+  constructor(private readonly commentService: CommentService) {}
 
   @Post()
   @ApiBody({

@@ -4,7 +4,7 @@ import { CATEGORY_SWAGGER_RESPONSE } from './category.constant';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './create-category.dto';
 import { PRODUCT_SWAGGER_RESPONSE } from '../product/product.constant';
-import { QueryParamDto } from 'src/shared/dto/query-params.dto';
+import { QueryParamDto } from '../../shared/dto/query-params.dto';
 
 @ApiTags('Category')
 @ApiBearerAuth()
@@ -60,5 +60,10 @@ export class CategoryController {
   @ApiBadRequestResponse(CATEGORY_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   public delete(@Param('id') id) {
     return this.categoryService.delete(id);
+  }
+
+  @Get('cate')
+  public findAll() {
+    return this.categoryService.findAll();
   }
 }

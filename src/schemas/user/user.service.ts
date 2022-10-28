@@ -2,8 +2,8 @@ import { HttpException, HttpStatus, Injectable, OnModuleInit } from '@nestjs/com
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import { QueryParamDto } from 'src/shared/dto/query-params.dto';
-import pagination from 'src/shared/helper/pagination';
+import { QueryParamDto } from '../../shared/dto/query-params.dto';
+import pagination from '../../shared/helper/pagination';
 import { ChangePasswordDto } from './change-password.dto';
 import { CreateUserDto } from './create-user.dto';
 import { User, UserDocument } from './user.schema';
@@ -40,7 +40,7 @@ export class UserService implements OnModuleInit {
     return createdUser;
   }
 
-  async getAll(condition: any, search: any, query: QueryParamDto): Promise<UserDocument[]> {
+  async getAll(condition: any, search: any, query: QueryParamDto) {
     const { limit, skip } = pagination(query.page, query.pageSize);
     const sort = {};
     if (query.sortBy) {
@@ -48,17 +48,27 @@ export class UserService implements OnModuleInit {
     } else {
       sort['createdAt'] = -1;
     }
-    return this.userModel.aggregate([
-      {
-        $match: {
-          ...condition,
-          $or: [{ name: new RegExp(search.key, 'i') }, { email: new RegExp(search.key, 'i') }],
+    const total = await this.userModel.countDocuments({ isActive: true });
+    const totalPage = total % limit == 0 ? total / limit : Math.floor(total / limit) + 1;
+    const data = await this.userModel
+      .aggregate([
+        {
+          $match: {
+            ...condition,
+            $or: [{ name: new RegExp(search.key, 'i') }, { email: new RegExp(search.key, 'i') }],
+          },
         },
-      },
-      { $limit: limit },
-      { $skip: skip },
-      { $sort: sort },
-    ]);
+        { $sort: sort },
+      ])
+      .skip(skip)
+      .limit(limit);
+    return {
+      data,
+      total,
+      totalPage,
+      pageSize: limit,
+      page: Number(query.page),
+    };
   }
 
   async getById(id: string): Promise<UserDocument> {

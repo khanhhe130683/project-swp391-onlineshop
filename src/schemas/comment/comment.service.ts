@@ -48,4 +48,8 @@ export class CommentService {
   async delete(id: string) {
     return this.commentModel.updateOne({ _id: id }, { isDeleted: true });
   }
+
+  findAll() {
+    return ['1', '2'];
+  }
 }

@@ -5,8 +5,8 @@ import { Product, ProductDocument } from '../product/product.schema';
 import { Model } from 'mongoose';
 import { CreateCategoryDto } from './create-category.dto';
 import { CATEGORY_REPONE } from './category.constant';
-import { QueryParamDto } from 'src/shared/dto/query-params.dto';
-import pagination from 'src/shared/helper/pagination';
+import { QueryParamDto } from '../../shared/dto/query-params.dto';
+import pagination from '../../shared/helper/pagination';
 
 @Injectable()
 export class CategoryService {
@@ -26,7 +26,7 @@ export class CategoryService {
     return createdCategory;
   }
 
-  async getAll(condition: any, query: QueryParamDto): Promise<CategoryDocument[]> {
+  async getAll(condition: any, query: QueryParamDto) {
     const { limit, skip } = pagination(query.page, query.pageSize);
     const sort = {};
     if (query.sortBy) {
@@ -34,7 +34,19 @@ export class CategoryService {
     } else {
       sort['createdAt'] = -1;
     }
-    return this.categoryModel.aggregate([{ $match: condition }, { $limit: limit }, { $skip: skip }, { $sort: sort }]);
+    const total = await this.categoryModel.countDocuments({ isDeleted: true });
+    const totalPage = total % limit == 0 ? total / limit : Math.floor(total / limit) + 1;
+    const data = await this.categoryModel
+      .aggregate([{ $match: condition }, { $sort: sort }])
+      .skip(skip)
+      .limit(limit);
+    return {
+      data,
+      total,
+      totalPage,
+      pageSize: limit,
+      page: Number(query.page),
+    };
   }
 
   async update(id: string, dataUpdate: any) {
@@ -57,5 +69,26 @@ export class CategoryService {
       throw new HttpException('The category contains products. Cannot delete', HttpStatus.BAD_REQUEST);
     }
     return this.categoryModel.updateOne({ _id: id }, { isDeleted: true });
+  }
+
+  findAll() {
+    return {
+      data: [
+        {
+          _id: '634cf5ac2f0e57f6dcda22a7',
+          updatedBy: null,
+          name: 'Dong ho',
+          slug: 'dong-ho',
+          isDeleted: false,
+          createdAt: '2022-10-17T06:26:52.691Z',
+          updatedAt: '2022-10-17T06:26:52.691Z',
+          __v: 0,
+        },
+      ],
+      total: 1,
+      totalPage: 1,
+      pageSize: 10,
+      page: null,
+    };
   }
 }

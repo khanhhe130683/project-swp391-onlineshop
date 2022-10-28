@@ -16,9 +16,9 @@ import {
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ProductService } from './product.service';
 import { CreateProductDto, UpdateProductDto } from './create-product.dto';
-import { QueryPostDto } from 'src/shared/dto/query-params.dto';
+import { QueryPostDto } from '../../shared/dto/query-params.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { multerOptions } from 'src/shared/helper/multer.option';
+import { multerOptions } from '../../shared/helper/multer.option';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -30,7 +30,10 @@ import {
 } from '@nestjs/swagger';
 import * as mongoose from 'mongoose';
 import { PRODUCT_SWAGGER_RESPONSE } from './product.constant';
-import { GetUser } from 'src/shared/decorator/get-user.decorator';
+import { GetUser } from '../../shared/decorator/get-user.decorator';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../../shared/decorator/roles.decorator';
+import { Role } from 'src/shared/constants/common.constant';
 
 @Controller('products')
 @ApiTags('Product')
@@ -102,7 +105,8 @@ export class ProductController {
   @UseInterceptors(FilesInterceptor('images', 3, multerOptions))
   @ApiOkResponse(PRODUCT_SWAGGER_RESPONSE.UPDATE_SUCCESS)
   @ApiBadRequestResponse(PRODUCT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
-  //@UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @Patch(':id')
   async update(@Body() body: UpdateProductDto, @Param('id') id, @GetUser() user) {
     const dataUpdate = {
