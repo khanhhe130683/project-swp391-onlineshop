@@ -86,7 +86,7 @@ export class OrderController {
   @ApiOkResponse(ORDER_SWAGGER_RESPONSE.GET_LIST_SUCCESS)
   @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Get()
-  async getAll(@Query() query: QueryParamDto, @GetUser() user) {
+  async getAllByUser(@Query() query: QueryParamDto, @GetUser() user) {
     const condition = {
       isDeleted: false,
       user: new mongoose.Types.ObjectId(user._id),
@@ -124,5 +124,19 @@ export class OrderController {
   @Delete(':id')
   async delete(@Param('id') id) {
     return this.orderService.delete(id);
+  }
+
+  @ApiOkResponse(ORDER_SWAGGER_RESPONSE.GET_LIST_SUCCESS)
+  @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
+  @Get()
+  async getAll(@Query() query: QueryParamDto) {
+    const condition = {
+      isDeleted: false,
+    };
+    const search = {};
+    if (query.search) {
+      search['key'] = query.search;
+    }
+    return this.orderService.getAll(condition, search, query);
   }
 }

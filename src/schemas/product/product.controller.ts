@@ -33,7 +33,7 @@ import { PRODUCT_SWAGGER_RESPONSE } from './product.constant';
 import { GetUser } from '../../shared/decorator/get-user.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../../shared/decorator/roles.decorator';
-import { Role } from 'src/shared/constants/common.constant';
+import { Role } from '../../shared/constants/common.constant';
 
 @Controller('products')
 @ApiTags('Product')
