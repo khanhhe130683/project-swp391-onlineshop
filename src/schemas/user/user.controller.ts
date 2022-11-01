@@ -19,7 +19,8 @@ import { QueryParamDto } from '../../shared/dto/query-params.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { ChangePasswordDto } from './change-password.dto';
-import { CreateUserDto } from './create-user.dto';
+import { CreateUserDto, UpdateUserDto } from './create-user.dto';
+import { ForgotPasswordDto } from './forgot-password.dto';
 import { USER_SWAGGER_RESPONSE } from './user.constant';
 import { UserService } from './user.service';
 
@@ -88,26 +89,44 @@ export class UserController {
     return this.userService.getById(id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiParam({
     name: 'id',
     type: 'string',
     description: 'id of user',
   })
   @ApiBody({
-    description: 'User',
-    type: CreateUserDto,
+    description: 'Update user by admin',
+    type: UpdateUserDto,
   })
   @ApiOkResponse(USER_SWAGGER_RESPONSE.UPDATE_SUCCESS)
   @ApiBadRequestResponse(USER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
-  @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  async updateInfo(@Param('id') id, @Body() body) {
-    const updatedBy = id;
+  async updateUser(@Param('id') id, @Body() body: UpdateUserDto, @GetUser() user) {
+    const updatedBy = user._id;
     const dataUpdate = {
       ...body,
       updatedBy,
     };
     return this.userService.update(id, dataUpdate);
+  }
+
+  @ApiBody({
+    description: 'Update user by user',
+    type: UpdateUserDto,
+  })
+  @ApiOkResponse(USER_SWAGGER_RESPONSE.UPDATE_SUCCESS)
+  @ApiBadRequestResponse(USER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
+  @UseGuards(JwtAuthGuard)
+  @Patch()
+  async updateInfo(@Body() body: UpdateUserDto, @GetUser() user) {
+    const updatedBy = user._id;
+    const dataUpdate = {
+      ...body,
+      updatedBy,
+    };
+    return this.userService.update(user._id, dataUpdate);
   }
 
   @ApiParam({
@@ -120,5 +139,17 @@ export class UserController {
   @Delete(':id')
   async inActive(@Param('id') id) {
     return this.userService.delete(id);
+  }
+
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'id of user',
+  })
+  @ApiOkResponse(USER_SWAGGER_RESPONSE.FORGOT_PASSWORD_SUCCESS)
+  @ApiBadRequestResponse(USER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
+  @Post('forgot-password')
+  async forgotPassword(@Body() body: ForgotPasswordDto) {
+    return this.userService.forgotPassword(body.email);
   }
 }

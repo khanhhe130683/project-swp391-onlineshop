@@ -1,13 +1,16 @@
-import { HttpException, HttpStatus, Injectable, OnModuleInit } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import * as sgMail from '@sendgrid/mail';
+import { generate } from 'generate-password';
 import { QueryParamDto } from '../../shared/dto/query-params.dto';
 import pagination from '../../shared/helper/pagination';
 import { ChangePasswordDto } from './change-password.dto';
 import { CreateUserDto } from './create-user.dto';
 import { User, UserDocument } from './user.schema';
 import { DEFAULT_ADMIN_USER } from './user.constant';
+import { sendGridConfig } from '../../config/config.constants';
 
 @Injectable()
 export class UserService implements OnModuleInit {
@@ -85,5 +88,48 @@ export class UserService implements OnModuleInit {
 
   async delete(id: string) {
     return this.userModel.updateOne({ _id: id }, { isActive: false });
+  }
+
+  async forgotPassword(email: string) {
+    const user = await this.userModel.findOne({ email });
+    if (!user) {
+      throw new BadRequestException('User not found, disabled or locked');
+    }
+
+    let password = generate({
+      length: 12,
+      numbers: true,
+    });
+    const sendPassword = password;
+    password = await bcrypt.hash(password, 10);
+    try {
+      await this.userModel.updateOne({ _id: user._id }, { password });
+      await this.sendEmail(sendPassword, email);
+      return {
+        success: true,
+      };
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async sendEmail(password: string, email: string) {
+    const key = sendGridConfig.sendGridApiKey;
+    try {
+      sgMail.setApiKey(key);
+      const msg = {
+        to: email,
+        from: sendGridConfig.sesSendFrom,
+        subject: sendGridConfig.subjectMail,
+        html: `<strong>
+        Username: ${email},
+        <br/>
+        password: <span style="color: blue;">${password}</span/>
+      </strong>`,
+      };
+      await sgMail.send(msg);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 }
