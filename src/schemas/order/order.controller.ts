@@ -128,7 +128,7 @@ export class OrderController {
 
   @ApiOkResponse(ORDER_SWAGGER_RESPONSE.GET_LIST_SUCCESS)
   @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
-  @Get()
+  @Get('list')
   async getAll(@Query() query: QueryParamDto) {
     const condition = {
       isDeleted: false,
