@@ -9,7 +9,7 @@ export class CommentService {
   constructor(
     @InjectModel(Comment.name)
     private commentModel: Model<CommentDocument>,
-  ) { }
+  ) {}
 
   async create(data: any) {
     const createdCategory = await this.commentModel.create(data);
@@ -47,5 +47,9 @@ export class CommentService {
 
   async delete(id: string) {
     return this.commentModel.updateOne({ _id: id }, { isDeleted: true });
+  }
+
+  findAll() {
+    return ['1', '2'];
   }
 }

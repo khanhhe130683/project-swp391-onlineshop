@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { BaseSchema } from 'src/shared/schemas/base-schema';
+import { BaseSchema } from '../../shared/schemas/base-schema';
 import { Role } from '../../shared/constants/common.constant';
 
 export type UserDocument = User & Document;

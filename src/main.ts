@@ -6,7 +6,16 @@ import { ValidationPipe } from './shared/pipe/validation.pipe';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: ['http://localhost:9528', 'http://localhost:8080', 'http://localhost:8081', 'http://localhost:8000'],
+    origin: [
+      'http://localhost:9528',
+      'http://localhost:8080',
+      'http://localhost:8081',
+      'http://localhost:8000',
+      'http://localhost:3000',
+      'http://localhost:1000',
+      'http://localhost:2000',
+      'http://localhost:5000',
+    ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
   });
@@ -19,6 +28,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  await app.listen(3000);
+  await app.listen(5000);
 }
 bootstrap();

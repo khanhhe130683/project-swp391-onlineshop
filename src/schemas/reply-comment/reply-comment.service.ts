@@ -27,4 +27,8 @@ export class ReplyCommentService {
   async delete(id: string) {
     return this.repCommentModel.updateOne({ _id: id }, { isDeleted: true });
   }
+
+  findAll() {
+    return ['1', '2'];
+  }
 }

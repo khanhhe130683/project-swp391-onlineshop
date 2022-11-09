@@ -13,13 +13,12 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import * as mongoose from 'mongoose';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ProductService } from './product.service';
 import { CreateProductDto, UpdateProductDto } from './create-product.dto';
-import { QueryParamDto } from 'src/shared/dto/query-params.dto';
+import { QueryPostDto } from '../../shared/dto/query-params.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { multerOptions } from 'src/shared/helper/multer.option';
+import { multerOptions } from '../../shared/helper/multer.option';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -29,15 +28,21 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
+import * as mongoose from 'mongoose';
 import { PRODUCT_SWAGGER_RESPONSE } from './product.constant';
-import { GetUser } from 'src/shared/decorator/get-user.decorator';
+import { GetUser } from '../../shared/decorator/get-user.decorator';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../../shared/decorator/roles.decorator';
+import { Role } from '../../shared/constants/common.constant';
 
 @Controller('products')
 @ApiTags('Product')
-@ApiBearerAuth()
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiBody({
     description: 'Product',
     type: CreateProductDto,
@@ -46,10 +51,10 @@ export class ProductController {
   @ApiOkResponse(PRODUCT_SWAGGER_RESPONSE.CREATE_SUCCESS)
   @ApiBadRequestResponse(PRODUCT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Post()
-  @UseInterceptors(FilesInterceptor('images', 3, multerOptions))
+  @UseInterceptors(FilesInterceptor('images', 5, multerOptions))
   async create(@UploadedFiles() files: Array<Express.Multer.File>, @Body() body: CreateProductDto) {
     const images = files.map((file) => {
-      return file.filename;
+      return file.path;
     });
 
     const dataCreate = {
@@ -66,10 +71,20 @@ export class ProductController {
   @ApiOkResponse(PRODUCT_SWAGGER_RESPONSE.GET_LIST_SUCCESS)
   @ApiBadRequestResponse(PRODUCT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Get()
-  async getAll(@Query() query: QueryParamDto) {
+  async getAll(@Query() query: QueryPostDto) {
     const condition = { isDeleted: false };
     if (query.search) {
-      condition['name'] = query.search;
+      condition['name'] = new RegExp(query.search, 'i');
+    }
+    if (query.category) {
+      condition['category'] = new mongoose.Types.ObjectId(query.category);
+    }
+    if (query.minPrice && query.maxPrice) {
+      condition['salePrice'] = { $gte: Number(query.minPrice), $lte: Number(query.maxPrice) };
+    } else if (query.maxPrice) {
+      condition['salePrice'] = { $lte: Number(query.maxPrice) };
+    } else if (query.minPrice) {
+      condition['salePrice'] = { $gte: Number(query.minPrice) };
     }
     return this.productService.getAll(condition, query);
   }
@@ -86,6 +101,7 @@ export class ProductController {
     return this.productService.getById(id);
   }
 
+  @ApiBearerAuth()
   @ApiParam({
     name: 'id',
     type: 'string',
@@ -99,7 +115,8 @@ export class ProductController {
   @UseInterceptors(FilesInterceptor('images', 3, multerOptions))
   @ApiOkResponse(PRODUCT_SWAGGER_RESPONSE.UPDATE_SUCCESS)
   @ApiBadRequestResponse(PRODUCT_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
-  //@UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @Patch(':id')
   async update(@Body() body: UpdateProductDto, @Param('id') id, @GetUser() user) {
     const dataUpdate = {
@@ -109,6 +126,9 @@ export class ProductController {
     return this.productService.update(id, dataUpdate);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiParam({
     name: 'id',
     type: 'string',

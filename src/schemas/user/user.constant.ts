@@ -103,6 +103,14 @@ export const USER_SWAGGER_RESPONSE = {
     },
     'Delete success',
   ),
+  FORGOT_PASSWORD_SUCCESS: swaggerSchemaExample(
+    {
+      data: {
+        success: true,
+      },
+    },
+    'Delete success',
+  ),
   GET_LIST_SUCCESS: swaggerSchemaExample(
     {
       data: [
