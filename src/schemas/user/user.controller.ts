@@ -129,6 +129,8 @@ export class UserController {
     return this.userService.update(user._id, dataUpdate);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiParam({
     name: 'id',
     type: 'string',

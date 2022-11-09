@@ -70,7 +70,7 @@ export class UserService implements OnModuleInit {
       total,
       totalPage,
       pageSize: limit,
-      page: Number(query.page),
+      page: skip == 0 ? 1 : skip,
     };
   }
 

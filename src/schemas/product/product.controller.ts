@@ -37,10 +37,12 @@ import { Role } from '../../shared/constants/common.constant';
 
 @Controller('products')
 @ApiTags('Product')
-@ApiBearerAuth()
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiBody({
     description: 'Product',
     type: CreateProductDto,
@@ -77,6 +79,13 @@ export class ProductController {
     if (query.category) {
       condition['category'] = new mongoose.Types.ObjectId(query.category);
     }
+    if (query.minPrice && query.maxPrice) {
+      condition['salePrice'] = { $gte: Number(query.minPrice), $lte: Number(query.maxPrice) };
+    } else if (query.maxPrice) {
+      condition['salePrice'] = { $lte: Number(query.maxPrice) };
+    } else if (query.minPrice) {
+      condition['salePrice'] = { $gte: Number(query.minPrice) };
+    }
     return this.productService.getAll(condition, query);
   }
 
@@ -92,6 +101,7 @@ export class ProductController {
     return this.productService.getById(id);
   }
 
+  @ApiBearerAuth()
   @ApiParam({
     name: 'id',
     type: 'string',
@@ -116,6 +126,9 @@ export class ProductController {
     return this.productService.update(id, dataUpdate);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiParam({
     name: 'id',
     type: 'string',

@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsOptional, IsNotEmpty, IsEnum, IsMongoId } from 'class-validator';
+import { IsString, IsOptional, IsNotEmpty, IsEnum, IsMongoId, IsNumberString } from 'class-validator';
 
 export class QueryParamDto {
   @ApiPropertyOptional()
@@ -34,6 +34,16 @@ export class QueryPostDto extends QueryParamDto {
   @IsMongoId()
   @IsOptional()
   category: string;
+
+  @ApiPropertyOptional()
+  @IsNumberString()
+  @IsOptional()
+  minPrice: string;
+
+  @ApiPropertyOptional()
+  @IsNumberString()
+  @IsOptional()
+  maxPrice: string;
 }
 
 export class ParamIdDto {
