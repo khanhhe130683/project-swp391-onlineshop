@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { swaggerSchemaExample } from 'src/shared/utils/swagger_schema';
-=======
 import { swaggerSchemaExample } from '../../shared/utils/swagger_schema';
->>>>>>> khanhtq
 
 export const AUTH_SWAGGER_RESPONSE = {
   LOGIN_SUCCESS: swaggerSchemaExample(

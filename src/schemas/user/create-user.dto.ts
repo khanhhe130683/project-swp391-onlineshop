@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { ApiProperty } from '@nestjs/swagger';
-=======
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
->>>>>>> khanhtq
 import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
 
 export class CreateUserDto {
@@ -40,17 +36,10 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: 'phone number',
-<<<<<<< HEAD
-    example: '0379416224',
-  })
-  @IsNotEmpty()
-  @IsPhoneNumber()
-=======
     example: '+84379416224',
   })
   @IsNotEmpty()
   @IsPhoneNumber('VI')
->>>>>>> khanhtq
   phoneNumber: string;
 
   @ApiProperty({
@@ -61,8 +50,6 @@ export class CreateUserDto {
   @IsString()
   address: string;
 }
-<<<<<<< HEAD
-=======
 
 export class UpdateUserDto {
   @ApiPropertyOptional({
@@ -97,4 +84,3 @@ export class UpdateUserDto {
   @IsString()
   address: string;
 }
->>>>>>> khanhtq

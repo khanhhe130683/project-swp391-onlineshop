@@ -1,9 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-<<<<<<< HEAD
-import { IsNotEmpty, IsString } from 'class-validator';
-=======
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
->>>>>>> khanhtq
 
 export class CreateCategoryDto {
   @ApiProperty({
@@ -22,8 +18,6 @@ export class CreateCategoryDto {
   @IsString()
   slug: string;
 }
-<<<<<<< HEAD
-=======
 
 export class UpdateCategoryDto {
   @ApiProperty({
@@ -42,4 +36,3 @@ export class UpdateCategoryDto {
   @IsString()
   slug: string;
 }
->>>>>>> khanhtq

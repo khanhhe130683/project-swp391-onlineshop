@@ -1,10 +1,6 @@
 import { Body, Controller, Post, UnauthorizedException } from '@nestjs/common';
-<<<<<<< HEAD
-import { ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-=======
 import { ApiBody, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from './auth-login.dto';
->>>>>>> khanhtq
 import { AUTH_SWAGGER_RESPONSE } from './auth.constant';
 import { AuthService } from './auth.service';
 
@@ -15,14 +11,6 @@ export class AuthController {
 
   @ApiOkResponse(AUTH_SWAGGER_RESPONSE.LOGIN_SUCCESS)
   @ApiNotFoundResponse(AUTH_SWAGGER_RESPONSE.LOGIN_FAIL)
-<<<<<<< HEAD
-  @Post('login')
-  async login(@Body() body) {
-    const { email, password } = body;
-    const user = await this.authService.validateUser(email, password);
-    if (!user) {
-      throw new UnauthorizedException();
-=======
   @ApiBody({
     description: 'Login',
     type: LoginDto,
@@ -33,7 +21,6 @@ export class AuthController {
     const user = await this.authService.validateUser(email, password);
     if (!user) {
       throw new UnauthorizedException('Wrong pasword! Please enter again.');
->>>>>>> khanhtq
     }
     return this.authService.login(user);
   }

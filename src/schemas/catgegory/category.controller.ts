@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import { Controller } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { CategoryService } from './category.service';
-=======
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CATEGORY_SWAGGER_RESPONSE } from './category.constant';
@@ -10,15 +5,11 @@ import { CategoryService } from './category.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './create-category.dto';
 import { PRODUCT_SWAGGER_RESPONSE } from '../product/product.constant';
 import { QueryParamDto } from '../../shared/dto/query-params.dto';
->>>>>>> khanhtq
 
 @ApiTags('Category')
 @ApiBearerAuth()
 @Controller('categories')
 export class CategoryController {
-<<<<<<< HEAD
-  constructor(private readonly categroyService: CategoryService) {}
-=======
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
@@ -75,5 +66,4 @@ export class CategoryController {
   public findAll() {
     return this.categoryService.findAll();
   }
->>>>>>> khanhtq
 }

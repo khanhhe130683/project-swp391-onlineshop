@@ -23,16 +23,12 @@ export class CreateListProductDto {
 export class CreateOrderDto {
   @ApiProperty({
     description: 'list products',
-<<<<<<< HEAD
-    example: '63282af9bec5fb726c7a8630',
-=======
     example: [
       {
         product: '63282af9bec5fb726c7a8630',
         quantity: 1,
       },
     ],
->>>>>>> khanhtq
   })
   @IsArray()
   @ValidateNested()

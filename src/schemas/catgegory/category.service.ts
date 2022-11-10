@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Category, CategoryDocument } from './category.schema';
-import { Product } from '../product/product.schema';
-import { Model } from 'mongoose';
-import { CreateCategoryDto } from './create-category.dto';
-=======
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Category, CategoryDocument } from './category.schema';
@@ -15,7 +7,6 @@ import { CreateCategoryDto } from './create-category.dto';
 import { CATEGORY_REPONE } from './category.constant';
 import { QueryParamDto } from '../../shared/dto/query-params.dto';
 import pagination from '../../shared/helper/pagination';
->>>>>>> khanhtq
 
 @Injectable()
 export class CategoryService {
@@ -23,24 +14,6 @@ export class CategoryService {
     @InjectModel(Category.name)
     private categoryModel: Model<CategoryDocument>,
     @InjectModel(Product.name)
-<<<<<<< HEAD
-    private productModel: Model<CategoryDocument>,
-  ) {}
-
-  async create(createdCategoryDto: CreateCategoryDto): Promise<CategoryDocument> {
-    const createdCategory = await this.categoryModel.create(createdCategoryDto);
-    return createdCategory;
-  }
-
-  async getAll(): Promise<CategoryDocument[]> {
-    return this.categoryModel.find().exec();
-  }
-
-  async update(id: string, dataUpdate: object) {
-    return this.categoryModel.updateOne({ _id: id }, dataUpdate);
-  }
-
-=======
     private productModel: Model<ProductDocument>,
   ) {}
 
@@ -90,7 +63,6 @@ export class CategoryService {
     return this.categoryModel.findById(id);
   }
 
->>>>>>> khanhtq
   async delete(id: string) {
     const checkCategory = await this.productModel.findOne({ category: id });
     if (checkCategory) {
@@ -98,8 +70,6 @@ export class CategoryService {
     }
     return this.categoryModel.updateOne({ _id: id }, { isDeleted: true });
   }
-<<<<<<< HEAD
-=======
 
   findAll() {
     return {
@@ -121,5 +91,4 @@ export class CategoryService {
       page: null,
     };
   }
->>>>>>> khanhtq
 }

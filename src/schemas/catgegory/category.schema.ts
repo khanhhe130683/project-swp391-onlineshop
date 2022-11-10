@@ -1,10 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-<<<<<<< HEAD
-import { BaseSchema } from 'src/shared/schemas/base-schema';
-=======
 import { BaseSchema } from '../../shared/schemas/base-schema';
->>>>>>> khanhtq
 
 export type CategoryDocument = Category & Document;
 
