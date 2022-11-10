@@ -98,6 +98,20 @@ export class OrderController {
     return this.orderService.getAll(condition, search, query);
   }
 
+  @ApiOkResponse(ORDER_SWAGGER_RESPONSE.GET_LIST_SUCCESS)
+  @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
+  @Get('list')
+  async getAll(@Query() query: QueryParamDto) {
+    const condition = {
+      isDeleted: false,
+    };
+    const search = {};
+    if (query.search) {
+      search['key'] = query.search;
+    }
+    return this.orderService.getAll(condition, search, query);
+  }
+
   @ApiParam({
     name: 'id',
     type: 'string',
@@ -124,19 +138,5 @@ export class OrderController {
   @Delete(':id')
   async delete(@Param('id') id) {
     return this.orderService.delete(id);
-  }
-
-  @ApiOkResponse(ORDER_SWAGGER_RESPONSE.GET_LIST_SUCCESS)
-  @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
-  @Get('list')
-  async getAll(@Query() query: QueryParamDto) {
-    const condition = {
-      isDeleted: false,
-    };
-    const search = {};
-    if (query.search) {
-      search['key'] = query.search;
-    }
-    return this.orderService.getAll(condition, search, query);
   }
 }
