@@ -9,8 +9,6 @@ import { ValidationPipe } from './shared/pipe/validation.pipe';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-<<<<<<< HEAD
-=======
   app.enableCors({
     origin: [
       'http://localhost:9528',
@@ -25,7 +23,6 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
   });
->>>>>>> khanhtq
   app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
     .setTitle('Online shop')
@@ -35,10 +32,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-<<<<<<< HEAD
-  await app.listen(3011);
-=======
   await app.listen(3000);
->>>>>>> khanhtq
 }
 bootstrap();
