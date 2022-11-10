@@ -3,6 +3,7 @@ import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { BaseSchema } from '../../shared/schemas/base-schema';
 import { User } from '../user/user.schema';
+import { OrderStatus } from './order.constant';
 
 export type OrderDocument = Order & Document;
 
@@ -13,6 +14,9 @@ export class Order extends BaseSchema {
 
   @Prop()
   orderCode: string;
+
+  @Prop({ default: OrderStatus.CREATE })
+  status: string;
 
   @Prop({ default: false })
   isDeleted: boolean;
