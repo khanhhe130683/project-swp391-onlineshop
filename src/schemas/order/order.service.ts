@@ -46,6 +46,24 @@ export class OrderService {
           localField: '_id',
           foreignField: 'order',
           as: 'order_details',
+          pipeline: [
+            {
+              $lookup: {
+                from: 'products',
+                localField: 'product',
+                foreignField: '_id',
+                as: 'product',
+              },
+            },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user',
         },
       },
       { $limit: limit },
