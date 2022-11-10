@@ -1,8 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+<<<<<<< HEAD
 import { QueryParamDto } from 'src/shared/dto/query-params.dto';
 import pagination from 'src/shared/helper/pagination';
+=======
+import { QueryParamDto } from '../../shared/dto/query-params.dto';
+import pagination from '../../shared/helper/pagination';
+>>>>>>> khanhtq
 import { Order, OrderDocument } from './order.schema';
 
 @Injectable()
@@ -21,6 +26,13 @@ export class OrderService {
     return this.orderModel.updateOne({ _id: id }, { isDeleted: true });
   }
 
+<<<<<<< HEAD
+=======
+  async hardDelete(id: string) {
+    return this.orderModel.deleteOne({ _id: id });
+  }
+
+>>>>>>> khanhtq
   async getAll(condition: any, search, query: QueryParamDto): Promise<OrderDocument[]> {
     const { limit, skip } = pagination(query.page, query.pageSize);
     const sort = {};
@@ -36,6 +48,35 @@ export class OrderService {
           orderCode: new RegExp(search.key),
         },
       },
+<<<<<<< HEAD
+=======
+      {
+        $lookup: {
+          from: 'orderdetails',
+          localField: '_id',
+          foreignField: 'order',
+          as: 'order_details',
+          pipeline: [
+            {
+              $lookup: {
+                from: 'products',
+                localField: 'product',
+                foreignField: '_id',
+                as: 'product',
+              },
+            },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+>>>>>>> khanhtq
       { $limit: limit },
       { $skip: skip },
       { $sort: sort },
@@ -43,6 +84,24 @@ export class OrderService {
   }
 
   async getOne(condition: any) {
+<<<<<<< HEAD
     return this.orderModel.findOne(condition);
+=======
+    return this.orderModel.aggregate([
+      {
+        $match: {
+          ...condition,
+        },
+      },
+      {
+        $lookup: {
+          from: 'orderdetails',
+          localField: '_id',
+          foreignField: 'order',
+          as: 'order_details',
+        },
+      },
+    ]);
+>>>>>>> khanhtq
   }
 }

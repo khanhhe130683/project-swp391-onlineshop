@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 import { Post } from '@nestjs/common';
+=======
+>>>>>>> khanhtq
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -6,6 +9,23 @@ import { ValidationPipe } from './shared/pipe/validation.pipe';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+<<<<<<< HEAD
+=======
+  app.enableCors({
+    origin: [
+      'http://localhost:9528',
+      'http://localhost:8080',
+      'http://localhost:8081',
+      'http://localhost:8000',
+      'http://localhost:3000',
+      'http://localhost:1000',
+      'http://localhost:2000',
+      'http://localhost:5000',
+    ],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    credentials: true,
+  });
+>>>>>>> khanhtq
   app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
     .setTitle('Online shop')
@@ -15,6 +35,10 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+<<<<<<< HEAD
   await app.listen(3011);
+=======
+  await app.listen(3000);
+>>>>>>> khanhtq
 }
 bootstrap();

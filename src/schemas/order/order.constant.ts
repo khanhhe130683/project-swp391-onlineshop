@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { swaggerSchemaExample } from 'src/shared/utils/swagger_schema';
+=======
+import { swaggerSchemaExample } from '../../shared/utils/swagger_schema';
+>>>>>>> khanhtq
 
 export enum OrderStatus {
   CREATE = 'create',

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import * as mongoose from 'mongoose';
@@ -5,6 +6,15 @@ import { ORDERCODE } from 'src/shared/constants/common.constant';
 import { GetUser } from 'src/shared/decorator/get-user.decorator';
 import { QueryParamDto } from 'src/shared/dto/query-params.dto';
 import generateOrderCode from 'src/shared/helper/orderCode';
+=======
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import * as mongoose from 'mongoose';
+import { ORDERCODE } from '../../shared/constants/common.constant';
+import { GetUser } from '../../shared/decorator/get-user.decorator';
+import { QueryParamDto } from '../../shared/dto/query-params.dto';
+import generateOrderCode from '../../shared/helper/orderCode';
+>>>>>>> khanhtq
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { OrderDetailService } from '../order-detail/order-detail.service';
 import { ProductService } from '../product/product.service';
@@ -23,6 +33,13 @@ export class OrderController {
     private readonly orderDetailService: OrderDetailService,
   ) {}
 
+<<<<<<< HEAD
+=======
+  @ApiBody({
+    description: 'Order',
+    type: CreateOrderDto,
+  })
+>>>>>>> khanhtq
   @ApiOkResponse(ORDER_SWAGGER_RESPONSE.CREATE_SUCCESS)
   @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Post()
@@ -55,7 +72,11 @@ export class OrderController {
     const dataOrderDetail = [];
     for (const index in products) {
       if (products[index].allowedQuantity < listProducts[index].quantity) {
+<<<<<<< HEAD
         await this.orderService.delete(orderCreated._id);
+=======
+        await this.orderService.hardDelete(orderCreated._id);
+>>>>>>> khanhtq
         throw new BadRequestException('Please choose allowed quantity!');
       }
 
@@ -82,7 +103,11 @@ export class OrderController {
   @ApiOkResponse(ORDER_SWAGGER_RESPONSE.GET_LIST_SUCCESS)
   @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Get()
+<<<<<<< HEAD
   async getAll(@Query() query: QueryParamDto, @GetUser() user) {
+=======
+  async getAllByUser(@Query() query: QueryParamDto, @GetUser() user) {
+>>>>>>> khanhtq
     const condition = {
       isDeleted: false,
       user: new mongoose.Types.ObjectId(user._id),
@@ -94,20 +119,58 @@ export class OrderController {
     return this.orderService.getAll(condition, search, query);
   }
 
+<<<<<<< HEAD
+=======
+  @ApiOkResponse(ORDER_SWAGGER_RESPONSE.GET_LIST_SUCCESS)
+  @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
+  @Get('list')
+  async getAll(@Query() query: QueryParamDto) {
+    const condition = {
+      isDeleted: false,
+    };
+    const search = {};
+    if (query.search) {
+      search['key'] = query.search;
+    }
+    return this.orderService.getAll(condition, search, query);
+  }
+
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'id of order',
+  })
+>>>>>>> khanhtq
   @ApiOkResponse(ORDER_SWAGGER_RESPONSE.GET_ORDER_SUCCESS)
   @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Get(':id')
   async getOne(@GetUser() user, @Param('id') id) {
     const condition = {
+<<<<<<< HEAD
       _id: id,
       user: user._id,
+=======
+      _id: new mongoose.Types.ObjectId(id),
+      user: new mongoose.Types.ObjectId(user._id),
+>>>>>>> khanhtq
     };
     return this.orderService.getOne(condition);
   }
 
+<<<<<<< HEAD
   @ApiOkResponse(ORDER_SWAGGER_RESPONSE.DELETE_SUCCESS)
   @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
   @Patch('delete/:id')
+=======
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'id of order',
+  })
+  @ApiOkResponse(ORDER_SWAGGER_RESPONSE.DELETE_SUCCESS)
+  @ApiBadRequestResponse(ORDER_SWAGGER_RESPONSE.BAD_REQUEST_EXCEPTION)
+  @Delete(':id')
+>>>>>>> khanhtq
   async delete(@Param('id') id) {
     return this.orderService.delete(id);
   }

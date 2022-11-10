@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { ApiProperty } from '@nestjs/swagger';
 import { IsMongoId, IsNotEmpty, IsNumberString, IsString } from 'class-validator';
+=======
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsMongoId, IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator';
+>>>>>>> khanhtq
 
 export class CreateProductDto {
   @ApiProperty({
@@ -57,4 +62,73 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsNumberString()
   actualQuantity: number;
+<<<<<<< HEAD
+=======
+
+  @ApiPropertyOptional({ type: 'array', items: { type: 'string', format: 'binary' } })
+  @IsOptional()
+  images: any[];
+}
+
+export class UpdateProductDto {
+  @ApiPropertyOptional({
+    description: 'category_id',
+    example: '631b05a76591da678480d09f',
+  })
+  @IsOptional()
+  @IsMongoId()
+  category: string;
+
+  @ApiPropertyOptional({
+    description: 'name',
+    example: 'Vong co',
+  })
+  @IsOptional()
+  @IsString()
+  name: string;
+
+  @ApiPropertyOptional({
+    description: 'description',
+    example: 'Vong co',
+  })
+  @IsOptional()
+  @IsString()
+  description: string;
+
+  @ApiPropertyOptional({
+    description: 'product_code',
+    example: 'VCO',
+  })
+  @IsOptional()
+  @IsString()
+  productCode: string;
+
+  @ApiPropertyOptional({
+    description: 'import_price',
+    example: 20,
+  })
+  @IsOptional()
+  @IsNumberString()
+  importPrice: number;
+
+  @ApiPropertyOptional({
+    description: 'sale_price',
+    example: 25,
+  })
+  @IsOptional()
+  @IsNumberString()
+  salePrice: number;
+
+  @ApiPropertyOptional({
+    description: 'inventory quantity',
+    example: 20,
+  })
+  @IsOptional()
+  @IsNumberString()
+  actualQuantity: number;
+
+  @ApiPropertyOptional({ type: 'array', items: { type: 'string', format: 'binary' } })
+  @IsOptional()
+  images: any[];
+>>>>>>> khanhtq
 }

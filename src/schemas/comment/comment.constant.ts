@@ -1,15 +1,6 @@
 import { swaggerSchemaExample } from '../../shared/utils/swagger_schema';
 
-export const CATEGORY_CONST = {
-  MODEL_NAME: 'category',
-  MODEL_PROVIDER: 'CATEGORY_MODEL',
-};
-
-export enum CategoryStatus {
-  ACTIVE = 1,
-  INACTIVE = 0,
-}
-export const CATEGORY_SWAGGER_RESPONSE = {
+export const COMMENT_SWAGGER_RESPONSE = {
   CREATE_SUCCESS: swaggerSchemaExample(
     {
       data: {
@@ -81,15 +72,6 @@ export const CATEGORY_SWAGGER_RESPONSE = {
     'Update success',
   ),
 
-  BAD_REQUEST_CATEGORY_EXISTED: swaggerSchemaExample(
-    {
-      message: 'Slug existed',
-      code: 'us00004',
-      statusCode: 400,
-    },
-    'bad request',
-  ),
-
   DELETE_SUCCESS: swaggerSchemaExample(
     {
       data: {
@@ -98,11 +80,4 @@ export const CATEGORY_SWAGGER_RESPONSE = {
     },
     'Delete success',
   ),
-};
-
-export const CATEGORY_REPONE = {
-  SLUG_EXISTED: 'Slug or Name is existed',
-  BAD_REQUEST: 'bad request',
-  CATEGORY_HAVE_PRODUCTS: `Category Have Products Don't Delete`,
-  PRODUCT_NOT_FOUND: 'Product not found',
 };
