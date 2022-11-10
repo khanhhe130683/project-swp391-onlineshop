@@ -37,7 +37,7 @@ import { Role } from '../../shared/constants/common.constant';
 
 @Controller('products')
 @ApiTags('Product')
-export class ProductController {
+export class ProductdetailController {
   constructor(private readonly productService: ProductService) {}
 
   @ApiBearerAuth()

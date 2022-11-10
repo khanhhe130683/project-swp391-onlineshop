@@ -7,7 +7,7 @@ import { CreateProductDto } from './create-product.dto';
 import { Product, ProductDocument } from './Product.schema';
 
 @Injectable()
-export class ProductService {
+export class ProductdetailService {
   constructor(
     @InjectModel(Product.name)
     private productModel: Model<ProductDocument>,

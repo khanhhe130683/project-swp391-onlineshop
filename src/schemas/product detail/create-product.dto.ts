@@ -1,5 +1,10 @@
+<<<<<<< HEAD
+import { ApiProperty } from '@nestjs/swagger';
+import { IsMongoId, IsNotEmpty, IsNumberString, IsString } from 'class-validator';
+=======
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsMongoId, IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator';
+>>>>>>> khanhtq
 
 export class CreateProductDto {
   @ApiProperty({
@@ -57,6 +62,8 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsNumberString()
   actualQuantity: number;
+<<<<<<< HEAD
+=======
 
   @ApiPropertyOptional({ type: 'array', items: { type: 'string', format: 'binary' } })
   @IsOptional()
@@ -123,4 +130,5 @@ export class UpdateProductDto {
   @ApiPropertyOptional({ type: 'array', items: { type: 'string', format: 'binary' } })
   @IsOptional()
   images: any[];
+>>>>>>> khanhtq
 }
